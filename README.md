@@ -2,7 +2,7 @@
 Plugins in GOlang
 
 ## Screencast
-[![Screencast](https://raw.githubusercontent.com/kcmerrill/MrT/master/screenshot.png)] (https://www.youtube.com/watch?v=ZxtV3rRJssI)
+[![Screencast](http://img.youtube.com/vi/ZxtV3rRJssI/2.jpg)] (https://www.youtube.com/watch?v=ZxtV3rRJssI)
 
 ## Why?
 One of the big things I love about interpreted languages is the extensibility of the appliation without needing to recompile it everytime. Although I'm not a huge fan of WordPress, one of the ideas/concepts that I really love that they implemented is hooks/filters. I wanted this ability in golang. 
