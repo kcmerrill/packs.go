@@ -1,5 +1,5 @@
 # plugin.go
-Plugins in GOlang
+Plugins in GOlang. It works, but it's rough around the edges as it's just a prototype
 
 ## Screencast
 [![Screencast](http://img.youtube.com/vi/ZxtV3rRJssI/2.jpg)] (https://www.youtube.com/watch?v=ZxtV3rRJssI)
@@ -25,3 +25,6 @@ Each plugin(script/application) you build will simply need two things. How to re
 ```trigger``` should be a string of your choosing(you'll call this in hook/filter call in go)
 
 Your application should then be capable of reading stdin, and spitting out it's modifications. 
+
+## TL;DR
+Write a script(any language) that can read stdin, and also can spit out json. plugin.go will call it, you mutate/do something and the output(stdout) is used.
