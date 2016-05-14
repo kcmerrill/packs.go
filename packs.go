@@ -34,6 +34,16 @@ func Filter(trigger string, payload interface{}) interface{} {
 	return pack(trigger, payload, "filter", false)
 }
 
+func FilterInt(trigger string, payload interface{}) int {
+	filtered := Filter(trigger, payload)
+	return int(filtered.(float64))
+}
+
+func FilterString(trigger string, payload interface{}) string {
+	filtered := Filter(trigger, payload)
+	return filtered.(string)
+}
+
 func pack(trigger string, payload interface{}, type_ string, async bool) interface{} {
 	if _, exists := packs[trigger]; exists {
 		for _, priority := range packs[trigger].priorities() {
