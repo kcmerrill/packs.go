@@ -1,4 +1,4 @@
-package plugin
+package packs
 
 import (
 	"bytes"
@@ -16,17 +16,19 @@ type event struct {
 	Priority int    `json:"priority"`
 }
 
-func (e *event) exec(trigger, action string, payload interface{}) interface{} {
-	/* TODO: More error checking */
+func (e *event) exec(trigger, payload interface{}) interface{} {
+	original_payload := payload
 	j, err := json.Marshal(payload)
 	if err != nil {
-		return payload
+		return original_payload
 	}
 	cmd := exec.Command(e.cmd)
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	cmd.Stdin = bytes.NewReader(j)
-	cmd.Run()
+	if err := cmd.Run(); err != nil {
+		return original_payload
+	}
 	json.Unmarshal(out.Bytes(), &payload)
 	return payload
 }
@@ -34,15 +36,15 @@ func (e *event) exec(trigger, action string, payload interface{}) interface{} {
 func register(dir string, file os.FileInfo) ([]*event, error) {
 	cmd_path := dir + "/" + file.Name()
 	output, _ := exec.Command(cmd_path, "--register-plugin").Output()
-	var registers []*event
-	if err := json.Unmarshal(output, &registers); err != nil {
+	var events []*event
+	if err := json.Unmarshal(output, &events); err != nil {
 		return nil, err
 	}
 	/* setup some basic info about this plugin */
-	for _, e := range registers {
+	for _, e := range events {
 		e.name = file.Name()
 		e.path = dir
 		e.cmd = e.path + "/" + e.name
 	}
-	return registers, nil
+	return events, nil
 }
