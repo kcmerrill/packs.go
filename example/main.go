@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/kcmerrill/plugin.go"
+	plugin "github.com/kcmerrill/packs.go"
 	"os"
 )
 
