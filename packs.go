@@ -22,6 +22,13 @@ func Init(dir string, args []string) error {
 	return nil
 }
 
+func TriggerExists(t string) bool {
+	if _, exists := packs[t]; exists {
+		return true
+	}
+	return false
+}
+
 func GoRun(trigger string, payload interface{}) interface{} {
 	return pack(trigger, payload, "run", true)
 }
