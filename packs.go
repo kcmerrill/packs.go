@@ -98,7 +98,7 @@ func load(dir string) error {
 
 func folder_structure(dir string) (string, error) {
 	/* Get rid of the trailing slash */
-	dir = strings.TrimSuffix(dir, "/") + "/packs.go"
+	dir = strings.TrimSuffix(dir, "/")
 	/* Make our pack directory structure if it doesn't exist */
 	make := []string{dir, dir + "/disabled", dir + "/enabled"}
 	for _, d := range make {
