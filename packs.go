@@ -2,14 +2,17 @@ package packs
 
 import (
 	"io/ioutil"
+	"net/http"
 	"os"
 	"strings"
 )
 
 var directory string
+var project string
 var packs map[string]*trigger
 
-func Init(dir string, args []string) error {
+func Init(project_path string, dir string) error {
+	project = project_path
 	packs_dir, err := folder_structure(dir)
 	if err != nil {
 		/* unable to create the folders, bail */
@@ -21,6 +24,18 @@ func Init(dir string, args []string) error {
 		return err
 	}
 	return nil
+}
+
+func Download(string plugin) bool {
+	/* first lets check if is a special page */
+	if strings.HasPrefix("http", plugin) {
+		response, err := http.Get(string)
+		if err == nil {
+			defer response.Body.Close()
+			fmt.Println("Found!", response.Body)
+		}
+	}
+
 }
 
 func IsEnabled(pack string) bool {
