@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+var directory string
 var packs map[string]*trigger
 
 func Init(dir string, args []string) error {
@@ -20,6 +21,36 @@ func Init(dir string, args []string) error {
 		return err
 	}
 	return nil
+}
+
+func IsEnabled(pack string) bool {
+	if _, err := os.Stat(directory + "/enabled/" + pack); err == nil {
+		return true
+	}
+	return false
+}
+
+func Enable(pack string) bool {
+	if IsDisabled(pack) {
+		os.Rename(directory+"/disabled/"+pack, directory+"/enabled/"+pack)
+		return true
+	}
+	return false
+}
+
+func IsDisabled(pack string) bool {
+	if _, err := os.Stat(directory + "/disabled/" + pack); err == nil {
+		return true
+	}
+	return false
+}
+
+func Disable(pack string) bool {
+	if IsEnabled(pack) {
+		os.Rename(directory+"/enabled/"+pack, directory+"/disabled/"+pack)
+		return true
+	}
+	return false
 }
 
 func TriggerExists(t string) bool {
@@ -99,6 +130,7 @@ func load(dir string) error {
 func folder_structure(dir string) (string, error) {
 	/* Get rid of the trailing slash */
 	dir = strings.TrimSuffix(dir, "/")
+	directory = dir
 	/* Make our pack directory structure if it doesn't exist */
 	make := []string{dir, dir + "/disabled", dir + "/enabled"}
 	for _, d := range make {

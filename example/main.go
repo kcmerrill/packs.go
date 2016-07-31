@@ -12,4 +12,8 @@ func main() {
 	password := plugin.Filter("filter_password", my_password)
 	fmt.Println("Before: ", "asd123")
 	fmt.Println("Hashed: ", password)
+
+	/* Displaying helper functions */
+	fmt.Println("Enabled: ", plugin.IsEnabled("append.py"))
+	fmt.Println("Enabled: ", plugin.IsEnabled("doesnotexist.py"))
 }
