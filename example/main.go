@@ -19,8 +19,8 @@ func main() {
 	fmt.Println("Hashed: ", password)
 
 	/* Displaying helper functions */
-	fmt.Println("Enabled: ", plugin.IsEnabled("append.py"))
-	fmt.Println("Enabled: ", plugin.IsEnabled("doesnotexist.py"))
+	fmt.Println("Enabled: ", plugin.IsEnabled("append"))
+	fmt.Println("Enabled: ", plugin.IsEnabled("doesnotexist"))
 
 	/* A quick message about downloading and installing plugins */
 	fmt.Println("Now ... run this program again. This time, use --download-plugin append")

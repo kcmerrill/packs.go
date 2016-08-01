@@ -51,10 +51,7 @@ func Download(plugin string) bool {
 	if DownloadViaHTTP(project+"/"+plugin, filename) {
 		return true
 	}
-	/* Next, try the official repo for this project */
-	if DownloadViaHTTP("https://raw.githubusercontent.com/"+project+"/master/"+plugin, filename) {
-		return true
-	}
+
 	return false
 }
 
