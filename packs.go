@@ -25,6 +25,14 @@ func Init(project_path string, dir string) error {
 	if err := load(packs_dir); err != nil {
 		return err
 	}
+
+	/* Lets process command line arguments */
+	if len(os.Args) == 3 {
+		if os.Args[1] == "--download-plugin" {
+			Download(os.Args[2])
+		}
+	}
+
 	return nil
 }
 

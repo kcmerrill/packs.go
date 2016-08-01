@@ -40,11 +40,13 @@ func register(dir string, file os.FileInfo) ([]*event, error) {
 	if err := json.Unmarshal(output, &events); err != nil {
 		return nil, err
 	}
+
 	/* setup some basic info about this plugin */
 	for _, e := range events {
 		e.name = file.Name()
 		e.path = dir
 		e.cmd = e.path + "/" + e.name
 	}
+
 	return events, nil
 }
