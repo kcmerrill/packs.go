@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -12,8 +13,9 @@ var project string
 var packs map[string]*trigger
 
 func Init(project_path string, dir string) error {
-	project = project_path
+	project = strings.TrimSuffix(project_path, "/")
 	packs_dir, err := folder_structure(dir)
+
 	if err != nil {
 		/* unable to create the folders, bail */
 		return err
@@ -26,20 +28,45 @@ func Init(project_path string, dir string) error {
 	return nil
 }
 
-func Download(string plugin) bool {
+func Download(plugin string) bool {
+	filename := filepath.Base(plugin)
 	/* first lets check if is a special page */
-	if strings.HasPrefix("http", plugin) {
-		response, err := http.Get(string)
-		if err == nil {
-			defer response.Body.Close()
-			fmt.Println("Found!", response.Body)
-		}
+	if DownloadViaHTTP(plugin, filename) {
+		Reload()
+		return true
 	}
 
+	/* Were we given a specific http repo? This will fail fast if not ... */
+	if DownloadViaHTTP(project+"/"+plugin, filename) {
+		Reload()
+		return true
+	}
+	/* Next, try the official repo for this project */
+	if DownloadViaHTTP("https://raw.githubusercontent.com/"+project+"/master/"+plugin, filename) {
+		Reload()
+		return true
+	}
+	return false
+}
+
+func DownloadViaHTTP(plugin, saveas string) bool {
+	if strings.HasPrefix(plugin, "http") {
+		response, err := http.Get(plugin)
+		if err == nil {
+			defer response.Body.Close()
+			if contents, err := ioutil.ReadAll(response.Body); err == nil && response.StatusCode == 200 {
+				ioutil.WriteFile(directory+"/enabled/"+saveas, contents, 0751)
+				Reload()
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func IsEnabled(pack string) bool {
 	if _, err := os.Stat(directory + "/enabled/" + pack); err == nil {
+		Reload()
 		return true
 	}
 	return false
@@ -48,6 +75,7 @@ func IsEnabled(pack string) bool {
 func Enable(pack string) bool {
 	if IsDisabled(pack) {
 		os.Rename(directory+"/disabled/"+pack, directory+"/enabled/"+pack)
+		Reload()
 		return true
 	}
 	return false
@@ -55,6 +83,7 @@ func Enable(pack string) bool {
 
 func IsDisabled(pack string) bool {
 	if _, err := os.Stat(directory + "/disabled/" + pack); err == nil {
+		Reload()
 		return true
 	}
 	return false
@@ -63,6 +92,7 @@ func IsDisabled(pack string) bool {
 func Disable(pack string) bool {
 	if IsEnabled(pack) {
 		os.Rename(directory+"/enabled/"+pack, directory+"/disabled/"+pack)
+		Reload()
 		return true
 	}
 	return false
@@ -73,6 +103,10 @@ func TriggerExists(t string) bool {
 		return true
 	}
 	return false
+}
+
+func Reload() {
+	Init(project, directory)
 }
 
 func GoRun(trigger string, payload interface{}) interface{} {
