@@ -13,6 +13,17 @@ var project string
 var packs map[string]*trigger
 
 func Init(project_path string, dir string) error {
+	loaded := Load(project_path, dir)
+
+	if len(os.Args) == 3 {
+		if os.Args[1] == "--download-plugin" {
+			Download(os.Args[2])
+		}
+	}
+
+	return loaded
+}
+func Load(project_path string, dir string) error {
 	project = strings.TrimSuffix(project_path, "/")
 	packs_dir, err := folder_structure(dir)
 
@@ -102,7 +113,7 @@ func TriggerExists(t string) bool {
 }
 
 func Reload() {
-	Init(project, directory)
+	Load(project, directory)
 }
 
 func GoRun(trigger string, payload interface{}) interface{} {
@@ -184,13 +195,4 @@ func folder_structure(dir string) (string, error) {
 		}
 	}
 	return dir + "/enabled", nil
-}
-
-func init() {
-	/* Lets process command line arguments */
-	if len(os.Args) == 3 {
-		if os.Args[1] == "--download-plugin" {
-			Download(os.Args[2])
-		}
-	}
 }
