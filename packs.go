@@ -1,6 +1,7 @@
 package packs
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -17,7 +18,34 @@ func Init(project_path string, dir string) error {
 
 	if len(os.Args) == 3 {
 		if os.Args[1] == "--download-plugin" {
-			Download(os.Args[2])
+			fmt.Println("[" + os.Args[2] + "] Downloading ...")
+			if Download(os.Args[2]) {
+				fmt.Println("Ok")
+				os.Exit(0)
+			} else {
+				fmt.Println("Failed")
+				os.Exit(1)
+			}
+		}
+
+		if os.Args[1] == "--disable-plugin" {
+			if Disable(os.Args[2]) {
+				fmt.Println("[" + os.Args[2] + "] Disabled")
+				os.Exit(0)
+			} else {
+				fmt.Println("[" + os.Args[2] + "] Problem disabling ...")
+				os.Exit(1)
+			}
+		}
+
+		if os.Args[1] == "--enable-plugin" {
+			if Enable(os.Args[2]) {
+				fmt.Println("[" + os.Args[2] + "] Enabled")
+				os.Exit(0)
+			} else {
+				fmt.Println("[" + os.Args[2] + "] Problem enabling ...")
+				os.Exit(1)
+			}
 		}
 	}
 
