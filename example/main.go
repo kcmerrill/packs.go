@@ -6,11 +6,11 @@ import (
 )
 
 func main() {
-	plugin.Init("kcmerrill/packs.go/", "./plugins/")
+	plugin.Init("https://raw.githubusercontent.com/kcmerrill/packs.go/master/example/plugins/available", "./plugins/")
 	/* Download from a specific page */
-	plugin.Download("https://raw.githubusercontent.com/kcmerrill/packs.go/master/example/plugins/available/append.py")
+	//plugin.Download("https://raw.githubusercontent.com/kcmerrill/packs.go/master/example/plugins/available/append.py")
 	/* Download from our official repository */
-	plugin.Download("example/plugins/available/password.py")
+	//plugin.Download("password.py")
 
 	/* Get going ... */
 	my_password := "asd123"
@@ -21,4 +21,9 @@ func main() {
 	/* Displaying helper functions */
 	fmt.Println("Enabled: ", plugin.IsEnabled("append.py"))
 	fmt.Println("Enabled: ", plugin.IsEnabled("doesnotexist.py"))
+
+	/* A quick message about downloading and installing plugins */
+	fmt.Println("Now ... run this program again. This time, use --download-plugin append")
+	fmt.Println("Now ... run this program again. This time, use --download-plugin password")
+	fmt.Println("Now ... run this program again. This time, use --download-plugin append2")
 }
