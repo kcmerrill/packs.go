@@ -11,8 +11,8 @@ def main():
     else:
         register = [{
                 "action": "filter",
-                "trigger": "filter_append",
-                "priority":1
+                "trigger": "filter_password",
+                "priority":6
             }]
         print json.dumps(register)
 

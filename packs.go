@@ -40,18 +40,15 @@ func Download(plugin string) bool {
 	filename := filepath.Base(plugin)
 	/* first lets check if is a special page */
 	if DownloadViaHTTP(plugin, filename) {
-		Reload()
 		return true
 	}
 
 	/* Were we given a specific http repo? This will fail fast if not ... */
 	if DownloadViaHTTP(project+"/"+plugin, filename) {
-		Reload()
 		return true
 	}
 	/* Next, try the official repo for this project */
 	if DownloadViaHTTP("https://raw.githubusercontent.com/"+project+"/master/"+plugin, filename) {
-		Reload()
 		return true
 	}
 	return false
@@ -74,7 +71,6 @@ func DownloadViaHTTP(plugin, saveas string) bool {
 
 func IsEnabled(pack string) bool {
 	if _, err := os.Stat(directory + "/enabled/" + pack); err == nil {
-		Reload()
 		return true
 	}
 	return false
@@ -91,7 +87,6 @@ func Enable(pack string) bool {
 
 func IsDisabled(pack string) bool {
 	if _, err := os.Stat(directory + "/disabled/" + pack); err == nil {
-		Reload()
 		return true
 	}
 	return false
